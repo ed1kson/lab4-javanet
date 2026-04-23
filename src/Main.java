@@ -11,12 +11,10 @@ public class Main {
         new Client("eduard", actions[2], 25);
         new Client("eduard", actions[3]);
         new Client("eduard", actions[4]);
+
+        System.out.println("damn that's crazy");
     }
 }
-
-
-
-
 
 
 
