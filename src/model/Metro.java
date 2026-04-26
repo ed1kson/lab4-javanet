@@ -81,8 +81,13 @@ public class Metro implements Serializable {
         card.setBalance(card.getBalance()+money);
     }
 
-    public void addBalance(String name, double money) {
+    public boolean addBalance(String name, double money) {
+        Student s = getStudent(name);
+        if ( s == null ) {
+            return false;
+        }
         addBalance(getStudent(name), money);
+        return true;
     }
 
     public boolean takeARide(Student student) {
@@ -103,12 +108,26 @@ public class Metro implements Serializable {
     }
 
     public void printStudentInfo(Student stud) {
+        double balance;
+
+        if ( stud.getCard() == null ) {
+            balance = 0;
+        } else {
+            balance = stud.getCard().getBalance();
+        }
+
         System.out.printf("Name: %s\nage: %d\nstudies at: %s\ncard balance: %f",
-                stud.getName(), stud.getAge(), stud.getUni(), stud.getCard().getBalance());
+                stud.getName(), stud.getAge(), stud.getUni(), balance);
     }
 
     public double getBalance(Student student) {
         return student.getCard().getBalance();
     }
 
+    public void printInfo() {
+        for ( Student s : students ) {
+            printStudentInfo(s);
+            System.out.println();
+        }
+    }
 }

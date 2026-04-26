@@ -21,6 +21,8 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             while (true) {
+//                metro.printInfo();
+                System.out.println();
 
                 Socket socket = serverSocket.accept();
                 System.out.println("Client connected");

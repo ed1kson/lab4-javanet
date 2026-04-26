@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
@@ -27,43 +28,77 @@ public class ClientHandler implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            Student student = metro.getStudent(in.readLine());
             String message = in.readLine();
-            double money = 0;
-            if (message.equals("addBalance") ) {
-                money = Double.parseDouble(in.readLine());
-            }
-            if ( student == null ) {
-                out.println("failed");
+            String[] parts = message.split("[|]");
+            System.out.println(Arrays.toString(parts));
+
+            String response = "";
+            Student student;
+            if ((student = metro.getStudent(parts[1])) == null) {
+                out.println("Fail|Student was not found");
                 return;
             };
 
-            switch ( message ) {
+            switch (parts[0]) {
                 case "newcard":
-                    if ( !metro.addCard(student)) {
-                        out.println();
+                    if ( !addCard(student)) {
+                        response += "Fail|";
+                        response += ("Student already has a card");
                     }
+                    response += "Success!";
                     break;
                 case "studentinfo":
-                    out.println(metro.getStudentInfo(student));
+                    response += "Success!";
+                    response += "|" + (getStudentInfo(student));
                     break;
                 case "addbalance":
-                    metro.addBalance(student, money);
+                    double money;
+                    if ( (money = Double.parseDouble(parts[2])) == 0 ) {
+                        response += ("Fail|Can't top up with 0 UAH");
+                    }
+                    addBalance(student, money);
+                    response += "Success!";
+                    System.out.printf("Student %s topped up the card with %f UAH", student.getName(), money);
                     break;
                 case "ride":
-                    metro.takeARide(student);
+                    if ( !takeARide(student) ) {
+                        response += "Fail|";
+                        response += "Not sufficient money";
+                    }
                     break;
                 case "balanceinfo":
-                    out.println(  metro.getBalance(student) );
+                    response += "Success!|";
+                    response += ( getBalance(student) );
                     break;
                 default:
                     System.out.println("wadiyatalkinabeet");
+                    out.println("Error");
             }
 
-            out.println("Success!");
+            out.println(response);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private synchronized boolean addCard(Student student) {
+        return metro.addCard(student);
+    }
+
+    private synchronized String getStudentInfo(Student student) {
+        return metro.getStudentInfo(student);
+    }
+
+    private synchronized void addBalance(Student student, double money) {
+        metro.addBalance(student, money);
+    }
+
+    private synchronized boolean takeARide(Student student) {
+        return metro.takeARide(student);
+    }
+
+    private synchronized double getBalance(Student student) {
+        return metro.getBalance(student);
     }
 
 }
