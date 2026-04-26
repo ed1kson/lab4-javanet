@@ -6,13 +6,21 @@ public class Main {
 
         String[] actions = {"newcard", "studentinfo", "addbalance", "ride", "balanceinfo"};
 
-        new Client("eduard", "newcard");
-        new Client("eduard", actions[1]);
-        new Client("eduard", actions[2], 25);
-        new Client("eduard", actions[3]);
-        new Client("eduard", actions[4]);
-
-        System.out.println("damn that's crazy");
+        new Client("newcard|eduard");
+        new Client("newcard|sofia");
+        new Client("newcard|ning");
+        new Client("studentinfo|eduard");
+        new Client("addbalance|eduard|25");
+        new Client("addbalance|sofia|23");
+        new Client("addbalance|ning|4");
+        new Client("balanceinfo|eduard");
+        new Client("balanceinfo|sofia");
+        new Client("balanceinfo|ning");
+        new Client("ride|eduard");
+        new Client("ride|ning");
+        new Client("balanceinfo|eduard");
+        new Client("balanceinfo|edurad");
+        new Client("do a backflip|eduard");
     }
 }
 
