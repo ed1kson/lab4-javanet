@@ -71,8 +71,8 @@ public class ClientHandler implements Runnable {
                     response += ( getBalance(student) );
                     break;
                 default:
-                    System.out.println("wadiyatalkinabeet");
-                    out.println("Error");
+//                    System.out.println("wadiyatalkinabeet");
+                    response += "Fail|Unknown command";
             }
 
             out.println(response);
